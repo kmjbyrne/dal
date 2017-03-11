@@ -103,6 +103,6 @@ class DALAccessConfig{
         $this->host = $host;
     }
     public function generateConnectionString(){
-        return "mysql:host=".$this->getHost().";port=".$this->getPort().";dbname=".$this->getdbName(), $this->getDbUsername(),$this->getDbPassword();
+        return "mysql:host=".$this->getHost().";port=".$this->getPort().";dbname=".$this->getdbName();
     }
 }

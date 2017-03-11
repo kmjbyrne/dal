@@ -17,7 +17,11 @@ class DAL {
     }
     private function connect() {
         try {
-            $conn = new PDO("mysql:host=".$this->config->getHost().";port=".PORT.";dbname=".DBNAME, DBUSER, DBPASS);
+            $conn = new PDO(
+                $this->config->generateConnectionString(),
+                $this->config->getDbUsername(),
+                $this->config->getDbPassword()
+            );
             // set the PDO error mode to exception. Remember to disable in production !!!! TODO
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return $conn;
