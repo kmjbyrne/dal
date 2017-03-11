@@ -6,17 +6,20 @@
  */
 
 namespace DAL\Engine;
-use DAL\Config as Config;
+use DAL\Config\DALAccessConfig;
+use PDO;
+use PDOException;
 
 class DAL {
     private $config;
     public function __construct($DBHOST, $DBUSER, $DBPASS, $DBNAME, $PORT){
         // Config is expected to be 5 key value array
-        $config = new Config\Config($DBHOST, $DBUSER, $DBPASS, $DBNAME, $PORT);
+        $config = new DALAccessConfig($DBHOST, $DBUSER, $DBPASS, $DBNAME, $PORT);
         $this->config = $config;
     }
     private function connect() {
         try {
+            error_log($this->config->generateConnectionString());
             $conn = new PDO(
                 $this->config->generateConnectionString(),
                 $this->config->getDbUsername(),
