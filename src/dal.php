@@ -5,7 +5,7 @@
  * Time: 15:31
  */
 
-namespace DAL;
+namespace DAL\Engine;
 use DAL\Config as Config;
 
 class DAL {
@@ -31,7 +31,7 @@ class DAL {
             return false;
         }
     }
-    private function query($sql, $params=array()){
+    public function query($sql, $params=array()){
         $conn = $this->connect();
         $statement = $conn->prepare($sql);
 
