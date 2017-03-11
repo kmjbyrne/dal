@@ -5,19 +5,19 @@
  * Time: 15:31
  */
 
-// dev/test
-define('DBHOST','*');
-define('DBUSER','*');
-define('DBPASS','*');
-define('DBNAME','*');
-define('PORT', 3306);
+namespace DAL;
+use DAL\Config as Config;
 
-// Test
 class DAL {
-    public function __construct(){}
+    private $config;
+    public function __construct($DBHOST, $DBUSER, $DBPASS, $DBNAME, $PORT){
+        // Config is expected to be 5 key value array
+        $config = new Config\Config($DBHOST, $DBUSER, $DBPASS, $DBNAME, $PORT);
+        $this->config = $config;
+    }
     private function connect() {
         try {
-            $conn = new PDO("mysql:host=".DBHOST.";port=".PORT.";dbname=".DBNAME, DBUSER, DBPASS);
+            $conn = new PDO("mysql:host=".$this->config->getHost().";port=".PORT.";dbname=".DBNAME, DBUSER, DBPASS);
             // set the PDO error mode to exception. Remember to disable in production !!!! TODO
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return $conn;
