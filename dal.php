@@ -12,6 +12,7 @@ define('DBPASS','*');
 define('DBNAME','*');
 define('PORT', 3306);
 
+
 class DAL {
     public function __construct(){}
     private function connect() {
