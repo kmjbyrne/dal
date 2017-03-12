@@ -12,14 +12,14 @@ use PDOException;
 
 class DAL {
     private $config;
+    private $connection = null;
     public function __construct($DBHOST, $DBUSER, $DBPASS, $DBNAME, $PORT){
         // Config is expected to be 5 key value array
         $config = new DALAccessConfig($DBHOST, $DBUSER, $DBPASS, $DBNAME, $PORT);
         $this->config = $config;
     }
-    private function connect() {
+    public function connect() {
         try {
-            error_log($this->config->generateConnectionString());
             $conn = new PDO(
                 $this->config->generateConnectionString(),
                 $this->config->getDbUsername(),
@@ -34,13 +34,25 @@ class DAL {
             return false;
         }
     }
+    public function setConnection($conn){
+        $this->connection = $conn;
+    }
+    public function checkConnection(){
+        if($this->connection)
+            return true;
+        else
+            return false;
+    }
     public function query($sql, $params=array()){
-        $conn = $this->connect();
-        $statement = $conn->prepare($sql);
+        $connection = $this->connect();
+        if ($connection == false)
+            throw new PDOException("Connection not established!");
 
+        $statement = $connection->prepare($sql);
         if(!empty($params)){
-            foreach($params as $key => &$value)
-            $statement->bindParam(':' . $key, $value);
+            foreach($params as $key => &$value) {
+                $statement->bindParam(':' . $key, $value);
+            }
         }
         $statement->execute();
         if ($statement->queryString){
@@ -81,5 +93,8 @@ class DALQueryResult {
         else{
             return null;
         }
+    }
+    public function get(){
+        return $this->_results;
     }
 }
